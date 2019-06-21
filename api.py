@@ -40,28 +40,28 @@ api = Api(app)
 # Define endpoint actions.
 ###
 
-class UpArrow(Resource):
+class Forward(Resource):
     def get(self):
         autopy.key.toggle(autopy.key.Code.UP_ARROW, True, [], 0)
         time.sleep(key_hold_time_sec)
         autopy.key.toggle(autopy.key.Code.UP_ARROW, False, [], 0)
         return None
 
-class DownArrow(Resource):
+class Backward(Resource):
     def get(self):
         autopy.key.toggle(autopy.key.Code.DOWN_ARROW, True, [], 0)
         time.sleep(key_hold_time_sec)
         autopy.key.toggle(autopy.key.Code.DOWN_ARROW, False, [], 0)
         return None
 
-class LeftArrow(Resource):
+class Left(Resource):
     def get(self):
         autopy.key.toggle(autopy.key.Code.LEFT_ARROW, True, [], 0)
         time.sleep(key_hold_time_sec)
         autopy.key.toggle(autopy.key.Code.LEFT_ARROW, False, [], 0)
         return None
 
-class RightArrow(Resource):
+class Right(Resource):
     def get(self):
         autopy.key.toggle(autopy.key.Code.RIGHT_ARROW, True, [], 0)
         time.sleep(key_hold_time_sec)
@@ -78,19 +78,67 @@ class Space(Resource):
         autopy.key.tap(autopy.key.Code.SPACE, [])
         return None
 
+class Fire(Resource):
+    def get(self):
+        autopy.key.tap("a", [])
+        return None
+
+class Jump(Resource):
+    def get(self):
+        autopy.key.tap("q", [])
+        return None
+
+class Crouch(Resource):
+    def get(self):
+        autopy.key.tap("z", [])
+        return None
+
+class NextWeapon(Resource):
+    def get(self):
+        autopy.key.tap("p", [])
+        return None
+
+class PreviousWeapon(Resource):
+    def get(self):
+        autopy.key.tap("o", [])
+        return None
+
+class GodMode(Resource):
+    def get(self):
+        autopy.key.type_string("iddqd", wpm=60)
+        return None
+
+class AllItems(Resource):
+    def get(self):
+        autopy.key.type_string("idkfa", wpm=60)
+        return None
+
 
 ###
 # Attach endpoints.
 ###
 
-api.add_resource(UpArrow, '/up')
-api.add_resource(DownArrow, '/down')
-api.add_resource(LeftArrow, '/left')
-api.add_resource(RightArrow, '/right')
+api.add_resource(Forward, '/forward')
+api.add_resource(Backward, '/backward')
+api.add_resource(Left, '/left')
+api.add_resource(Right, '/right')
+
+api.add_resource(Fire, '/fire')
+api.add_resource(Jump, '/jump')
+api.add_resource(Crouch, '/crouch')
+api.add_resource(NextWeapon, '/next_weapon')
+api.add_resource(PreviousWeapon, '/previous_weapon')
 
 api.add_resource(Control, '/control')
 api.add_resource(Space, '/space')
 
+api.add_resource(GodMode, '/god_mode')
+api.add_resource(AllItems, '/all_items')
+
+
+###
+# Start server.
+###
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
