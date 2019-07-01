@@ -88,20 +88,15 @@ def test():
     model.eval()
     test_acc = 0.0
     for i, (images, labels) in enumerate(test_loader):
-
         if cuda_avail:
             images = Variable(images.cuda())
             labels = Variable(labels.cuda())
 
-        # Predict classes using images from the test set
+        # Predict classes using images from the test set.
         outputs = model(images)
         _, prediction = torch.max(outputs.data, 1)
 
         test_acc += torch.sum(prediction == labels.data)
-        #print(test_acc)
-
-    # Compute the average acc and loss over all 779 test images
-    test_acc = test_acc #/ 779
 
     return test_acc
 
@@ -113,18 +108,21 @@ def train(num_epochs):
         model.train()
         train_acc = 0.0
         train_loss = 0.0
+
         for i, (images, labels) in enumerate(train_loader):
-            # Move images and labels to gpu if available
             if cuda_avail:
                 images = Variable(images.cuda())
                 labels = Variable(labels.cuda())
 
-            # Clear all accumulated gradients
+            # Clear all accumulated gradients.
             optimizer.zero_grad()
-            # Predict classes using images from the test set
+
+            # Predict classes using images from the training set.
             outputs = model(images)
+
             # Compute the loss based on the predictions and actual labels
             loss = loss_fn(outputs, labels)
+
             # Backpropagate the loss
             loss.backward()
 
@@ -139,10 +137,6 @@ def train(num_epochs):
         # Call the learning rate adjustment function
         adjust_learning_rate(epoch)
 
-        # Compute the average acc and loss over all 779 training images
-        train_acc = train_acc #/ 779
-        train_loss = train_loss #/ 779
-
         # Evaluate on the test set
         test_acc = test()
 
@@ -151,7 +145,7 @@ def train(num_epochs):
             save_models(epoch)
             best_acc = test_acc
 
-        # Print the metrics
+        # Print metrics for epoch.
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {} , Test Accuracy: {}".format(epoch, train_acc, train_loss,test_acc))
 
 

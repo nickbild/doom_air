@@ -9,14 +9,14 @@ from PIL import Image
 from train import GestureNet
 
 
+# Load the saved model.
 checkpoint = torch.load("gestures_4.model")
 model = GestureNet(num_classes=2)
-
 model.load_state_dict(checkpoint)
 model.eval()
 
 
-def predict_image(image_path):
+def predict_image_class(image_path):
     image = Image.open(image_path)
     image = image.convert('RGB') # Model expects RGB.
 
@@ -40,15 +40,14 @@ def predict_image(image_path):
 
     # Predict the class of the image.
     output = model(input)
-
     index = output.data.numpy().argmax()
 
     return index
 
 
 if __name__ == "__main__":
-    imagefile = "data/test/3004 Brick 1x2/0004.png"
+    imagefile = "data/test/3004 Brick 1x2/0008.png"
     imagepath = os.path.join(os.getcwd(), imagefile)
 
-    index = predict_image(imagepath)
-    print("Predicted Class ", index)
+    index = predict_image_class(imagepath)
+    print("Predicted Class: ", index)
