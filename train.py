@@ -4,6 +4,7 @@ import torchvision
 from torchvision.transforms import transforms
 from torch.utils.data import DataLoader
 from torch.optim import Adam
+from torch.autograd import Variable
 
 
 class GestureNet(nn.Module):
@@ -24,7 +25,7 @@ class GestureNet(nn.Module):
         self.conv4 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu4 = nn.ReLU()
 
-        self.fc = nn.Linear(in_features=100 * 100 * 24, out_features=num_classes)
+        self.fc = nn.Linear(in_features=300 * 300 * 24, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
@@ -41,7 +42,7 @@ class GestureNet(nn.Module):
         output = self.conv4(output)
         output = self.relu4(output)
 
-        output = output.view(-1, 100 * 100 * 24)
+        output = output.view(-1, 300 * 300 * 24)
 
         output = self.fc(output)
 
@@ -200,4 +201,6 @@ if __name__ == "__main__":
     train_loader = load_train_dataset(train_transformations)
     test_loader = load_test_dataset(test_transformations)
 
+    print("Starting training.")
     train(200)
+

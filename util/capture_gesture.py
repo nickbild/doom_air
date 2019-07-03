@@ -18,7 +18,7 @@ def save_frame_sequence(num_images, delay_sec):
     if cap.isOpened():
         for i in range(num_images):
             ret_val, img = cap.read()
-            cv2.imwrite("img/test_" + i + ".jpg", img)
+            cv2.imwrite("img/test_" + str(i) + ".jpg", img)
             sleep(delay_sec)
 
         cap.release()
@@ -28,4 +28,4 @@ def save_frame_sequence(num_images, delay_sec):
 
 if __name__ == '__main__':
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
-    save_frame_sequence(10, 0.05)
+    save_frame_sequence(100, 0.05)
