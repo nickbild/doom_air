@@ -2,7 +2,11 @@ import cv2
 from time import sleep
 
 
-def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=600, display_height=600, framerate=21, flip_method=0) :
+img_width = 600
+img_height = 600
+
+
+def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=img_width, display_height=img_height, framerate=21, flip_method=0) :
     return ('nvarguscamerasrc ! '
     'video/x-raw(memory:NVMM), '
     'width=(int)%d, height=(int)%d, '
@@ -18,7 +22,7 @@ def save_frame_sequence(num_images, delay_sec):
     if cap.isOpened():
         for i in range(num_images):
             ret_val, img = cap.read()
-            cv2.imwrite("img/test_" + str(i) + ".jpg", img)
+            cv2.imwrite("img/gesture_" + str(i) + ".jpg", img)
             sleep(delay_sec)
 
         cap.release()

@@ -12,6 +12,10 @@ from time import sleep
 import cv2
 
 
+img_width = 600
+img_height = 600
+
+
 # Load the saved model.
 checkpoint = torch.load("gestures_4.model")
 model = GestureNet(num_classes=2)
@@ -24,7 +28,7 @@ def predict_image_class(image_path):
     image = image.convert('RGB') # Model expects RGB.
 
     transformation = transforms.Compose([
-        transforms.CenterCrop(600), # Image size defined here.
+        transforms.CenterCrop(img_width),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
@@ -38,7 +42,7 @@ def predict_image_class(image_path):
     if torch.cuda.is_available():
         image_tensor.cuda()
 
-    # Turn the input into a Variable
+    # Turn the input into a Variable.
     input = Variable(image_tensor)
 
     # Predict the class of the image.
@@ -50,7 +54,7 @@ def predict_image_class(image_path):
     return index
 
 
-def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=600, display_height=600, framerate=21, flip_method=0) :
+def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=img_width, display_height=img_height, framerate=21, flip_method=0) :
     return ('nvarguscamerasrc ! '
     'video/x-raw(memory:NVMM), '
     'width=(int)%d, height=(int)%d, '

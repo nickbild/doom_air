@@ -7,6 +7,10 @@ from torch.optim import Adam
 from torch.autograd import Variable
 
 
+img_width = 600
+img_height = 600
+
+
 class GestureNet(nn.Module):
     def __init__(self, num_classes=2):
         super(GestureNet, self).__init__()
@@ -25,7 +29,7 @@ class GestureNet(nn.Module):
         self.conv4 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu4 = nn.ReLU()
 
-        self.fc = nn.Linear(in_features=300 * 300 * 24, out_features=num_classes)
+        self.fc = nn.Linear(in_features=int(img_width/2) * int(img_height/2) * 24, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
@@ -42,7 +46,7 @@ class GestureNet(nn.Module):
         output = self.conv4(output)
         output = self.relu4(output)
 
-        output = output.view(-1, 300 * 300 * 24)
+        output = output.view(-1, int(img_width/2) * int(img_height/2) * 24)
 
         output = self.fc(output)
 
@@ -60,7 +64,7 @@ def load_train_dataset(train_transformations):
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=32,
-        num_workers=4,
+        num_workers=0,
         shuffle=True
     )
 
@@ -78,7 +82,7 @@ def load_test_dataset(test_transformations):
     test_loader = torch.utils.data.DataLoader(
         test_dataset,
         batch_size=32,
-        num_workers=4,
+        num_workers=0,
         shuffle=False
     )
 
@@ -203,4 +207,3 @@ if __name__ == "__main__":
 
     print("Starting training.")
     train(200)
-
