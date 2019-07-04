@@ -7,8 +7,8 @@ from torch.optim import Adam
 from torch.autograd import Variable
 
 
-img_width = 600
-img_height = 600
+img_width = 300
+img_height = 300
 
 
 class GestureNet(nn.Module):

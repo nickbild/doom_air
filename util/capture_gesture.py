@@ -2,8 +2,8 @@ import cv2
 from time import sleep
 
 
-img_width = 600
-img_height = 600
+img_width = 300
+img_height = 300
 
 
 def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=img_width, display_height=img_height, framerate=21, flip_method=0) :
@@ -27,9 +27,10 @@ def save_frame_sequence(num_images, delay_sec):
 
         cap.release()
     else:
-        print 'Unable to open camera.'
+        print('Unable to open camera.')
 
 
 if __name__ == '__main__':
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
     save_frame_sequence(100, 0.05)
+
