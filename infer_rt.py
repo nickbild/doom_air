@@ -12,8 +12,8 @@ from time import sleep
 import cv2
 
 
-img_width = 600
-img_height = 600
+img_width = 300
+img_height = 300
 
 
 # Load the saved model.
@@ -23,12 +23,8 @@ model.load_state_dict(checkpoint)
 model.eval()
 
 
-def predict_image_class(image_path):
-    image = Image.open(image_path)
-    image = image.convert('RGB') # Model expects RGB.
-
+def predict_image_class(image):
     transformation = transforms.Compose([
-        transforms.CenterCrop(img_width),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
@@ -48,10 +44,9 @@ def predict_image_class(image_path):
     # Predict the class of the image.
     output = model(input)
     index = output.data.numpy().argmax()
+    score = output[0, index].item()
 
-    # Look at output and get probabilities.
-
-    return index
+    return index, score
 
 
 def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=img_width, display_height=img_height, framerate=21, flip_method=0) :
@@ -71,11 +66,11 @@ if __name__ == "__main__":
     if cap.isOpened():
         while True:
             ret_val, img = cap.read()
-            cv2.imwrite("current.jpg", img)
-            # Do this without writing image to disk.
-            index = predict_image_class("current.jpg")
-            print("Predicted Class: ", index)
+            index, score = predict_image_class(img)
+            if score > 1.0:
+                print("Predicted Class: ", index)
 
         cap.release()
     else:
-        print 'Unable to open camera.'
+        print('Unable to open camera.')
+
