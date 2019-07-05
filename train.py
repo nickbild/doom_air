@@ -12,7 +12,7 @@ img_height = 300
 
 
 class GestureNet(nn.Module):
-    def __init__(self, num_classes=2):
+    def __init__(self, num_classes=11):
         super(GestureNet, self).__init__()
 
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=12, kernel_size=3, stride=1, padding=1)
@@ -194,7 +194,7 @@ if __name__ == "__main__":
 
     cuda_avail = torch.cuda.is_available()
 
-    model = GestureNet(num_classes=2)
+    model = GestureNet(num_classes=11)
 
     if cuda_avail:
         model.cuda()
