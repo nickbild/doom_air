@@ -17,8 +17,8 @@ img_height = 300
 
 
 # Load the saved model.
-checkpoint = torch.load("gestures_4.model")
-model = GestureNet(num_classes=2)
+checkpoint = torch.load("gestures_6.model")
+model = GestureNet(num_classes=11)
 model.load_state_dict(checkpoint)
 model.eval()
 
@@ -67,8 +67,9 @@ if __name__ == "__main__":
         while True:
             ret_val, img = cap.read()
             index, score = predict_image_class(img)
-            if score > 1.0:
-                print("Predicted Class: ", index)
+            #if score > 1.0:
+            print("Predicted Class: ", index)
+            print("Score: ", score)
 
         cap.release()
     else:
