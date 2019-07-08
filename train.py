@@ -108,6 +108,7 @@ def test():
 
 def train(num_epochs):
     best_acc = 0.0
+    best_acc_train = 0.0
 
     for epoch in range(num_epochs):
         model.train()
@@ -146,9 +147,10 @@ def train(num_epochs):
         test_acc = test()
 
         # Save the model if the test acc is greater than our current best
-        if test_acc > best_acc:
+        if test_acc >= best_acc or train_acc >= best_acc_train:
             save_models(epoch)
             best_acc = test_acc
+            best_acc_train = train_acc
 
         # Print metrics for epoch.
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {} , Test Accuracy: {}".format(epoch, train_acc, train_loss,test_acc))
