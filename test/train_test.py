@@ -18,14 +18,16 @@ class GestureNet(nn.Module):
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=12, kernel_size=3, stride=1, padding=1)
         self.relu1 = nn.ReLU()
 
-        self.pool = nn.MaxPool2d(kernel_size=2)
+        self.pool1 = nn.MaxPool2d(kernel_size=2)
 
         self.conv2 = nn.Conv2d(in_channels=12, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
 
+        self.pool2 = nn.MaxPool2d(kernel_size=2)
+
         self.dropout1 = nn.Dropout(0.2)
 
-        self.fc1 = nn.Linear(in_features=int(img_width/2) * int(img_height/2) * 24, out_features=128)
+        self.fc1 = nn.Linear(in_features=int(img_width/4) * int(img_height/4) * 24, out_features=128)
         self.relu5 = nn.ReLU()
 
         self.fc2 = nn.Linear(in_features=128, out_features=96)
@@ -43,14 +45,16 @@ class GestureNet(nn.Module):
         output = self.conv1(input)
         output = self.relu1(output)
 
-        output = self.pool(output)
+        output = self.pool1(output)
 
         output = self.conv2(output)
         output = self.relu2(output)
 
+        output = self.pool2(output)
+
         output = self.dropout1(output)
 
-        output = output.view(-1, int(img_width/2) * int(img_height/2) * 24)
+        output = output.view(-1, int(img_width/4) * int(img_height/4) * 24)
 
         output = self.fc1(output)
         output = self.relu5(output)
