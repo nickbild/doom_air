@@ -18,56 +18,37 @@ class GestureNet(nn.Module):
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=12, kernel_size=3, stride=1, padding=1)
         self.relu1 = nn.ReLU()
 
-        self.pool1 = nn.MaxPool2d(kernel_size=2)
-
-        self.conv2 = nn.Conv2d(in_channels=12, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=12, out_channels=12, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
 
-        self.pool2 = nn.MaxPool2d(kernel_size=2)
+        self.pool = nn.MaxPool2d(kernel_size=2)
 
-        self.dropout1 = nn.Dropout(0.2)
+        self.conv3 = nn.Conv2d(in_channels=12, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.relu3 = nn.ReLU()
 
-        self.fc1 = nn.Linear(in_features=int(img_width/4) * int(img_height/4) * 24, out_features=128)
-        self.relu5 = nn.ReLU()
+        self.conv4 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.relu4 = nn.ReLU()
 
-        self.fc2 = nn.Linear(in_features=128, out_features=96)
-        self.relu6 = nn.ReLU()
-
-        self.fc3 = nn.Linear(in_features=96, out_features=48)
-        self.relu7 = nn.ReLU()
-
-        self.dropout2 = nn.Dropout(0.2)
-
-        self.fc4 = nn.Linear(in_features=48, out_features=num_classes)
-
+        self.fc = nn.Linear(in_features=int(img_width/2) * int(img_height/2) * 24, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
         output = self.relu1(output)
 
-        output = self.pool1(output)
-
         output = self.conv2(output)
         output = self.relu2(output)
 
-        output = self.pool2(output)
+        output = self.pool(output)
 
-        output = self.dropout1(output)
+        output = self.conv3(output)
+        output = self.relu3(output)
 
-        output = output.view(-1, int(img_width/4) * int(img_height/4) * 24)
+        output = self.conv4(output)
+        output = self.relu4(output)
 
-        output = self.fc1(output)
-        output = self.relu5(output)
+        output = output.view(-1, int(img_width/2) * int(img_height/2) * 24)
 
-        output = self.fc2(output)
-        output = self.relu6(output)
-
-        output = self.fc3(output)
-        output = self.relu7(output)
-
-        output = self.dropout2(output)
-
-        output = self.fc4(output)
+        output = self.fc(output)
 
         return output
 
@@ -165,7 +146,7 @@ def train(num_epochs):
         # Evaluate on the test set
         test_acc = test()
 
-        # Save the model if the accuracy is greater than our current best.
+        # Save the model if the test acc is greater than our current best
         if test_acc >= best_acc or train_acc >= best_acc_train:
             save_models(epoch)
             best_acc = test_acc
@@ -176,7 +157,7 @@ def train(num_epochs):
 
 
 def adjust_learning_rate(epoch):
-    lr = 0.0001
+    lr = 0.00001
 
     if epoch > 180:
         lr = lr / 1000000
@@ -202,10 +183,8 @@ def save_models(epoch):
 
 if __name__ == "__main__":
     train_transformations = transforms.Compose([
-        #transforms.RandomHorizontalFlip(),
-        #transforms.RandomCrop(32,padding=4),
         transforms.ToTensor(),
-        transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
     test_transformations = transforms.Compose([
@@ -220,7 +199,7 @@ if __name__ == "__main__":
     if cuda_avail:
         model.cuda()
 
-    optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
+    optimizer = Adam(model.parameters(), lr=0.00001, weight_decay=0.0001)
     loss_fn = nn.CrossEntropyLoss()
 
     train_loader = load_train_dataset(train_transformations)
