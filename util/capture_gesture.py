@@ -1,9 +1,11 @@
 import cv2
 from time import sleep
+import sys
 
 
 img_width = 300
 img_height = 300
+batch = "9"
 
 
 def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=img_width, display_height=img_height, framerate=21, flip_method=0) :
@@ -20,9 +22,10 @@ def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=i
 # Capture [num_images] images, spaced [delay_sec] seconds apart.
 def save_frame_sequence(num_images, delay_sec):
     if cap.isOpened():
-        for i in range(num_images):
+        for i in range(num_images+20):
             ret_val, img = cap.read()
-            cv2.imwrite("img/gesture_" + str(i) + ".jpg", img)
+            if i >= 20: # Skip first 20 to let camera get lighting straigtened out.
+                cv2.imwrite("img/gesture_" + sys.argv[1] + "_" + sys.argv[2] + "_" + str(i) + "_" + batch + ".jpg", img)
             sleep(delay_sec)
 
         cap.release()
@@ -32,5 +35,7 @@ def save_frame_sequence(num_images, delay_sec):
 
 if __name__ == '__main__':
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    sleep(5)
+    print("Go!")
     save_frame_sequence(100, 0.05)
 

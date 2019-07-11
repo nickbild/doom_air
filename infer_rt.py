@@ -17,7 +17,7 @@ img_height = 300
 
 
 # Load the saved model.
-checkpoint = torch.load("gestures_4.model")
+checkpoint = torch.load("gestures_14_11924-11586_arch5.model")
 model = GestureNet(num_classes=11)
 model.load_state_dict(checkpoint)
 model.eval()

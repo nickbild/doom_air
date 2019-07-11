@@ -157,7 +157,7 @@ def train(num_epochs):
 
 
 def adjust_learning_rate(epoch):
-    lr = 0.001
+    lr = 0.00001
 
     if epoch > 180:
         lr = lr / 1000000
@@ -183,10 +183,8 @@ def save_models(epoch):
 
 if __name__ == "__main__":
     train_transformations = transforms.Compose([
-        #transforms.RandomHorizontalFlip(),
-        #transforms.RandomCrop(32,padding=4),
         transforms.ToTensor(),
-        transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
     test_transformations = transforms.Compose([
@@ -201,7 +199,7 @@ if __name__ == "__main__":
     if cuda_avail:
         model.cuda()
 
-    optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
+    optimizer = Adam(model.parameters(), lr=0.00001, weight_decay=0.0001)
     loss_fn = nn.CrossEntropyLoss()
 
     train_loader = load_train_dataset(train_transformations)
