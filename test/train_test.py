@@ -15,7 +15,7 @@ class GestureNet(nn.Module):
     def __init__(self, num_classes=11):
         super(GestureNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=12, kernel_size=3, stride=1, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=12, kernel_size=3, stride=1, padding=1)
         self.relu1 = nn.ReLU()
 
         self.conv2 = nn.Conv2d(in_channels=12, out_channels=12, kernel_size=3, stride=1, padding=1)
@@ -183,13 +183,15 @@ def save_models(epoch):
 
 if __name__ == "__main__":
     train_transformations = transforms.Compose([
+        transforms.Grayscale(),
         transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        transforms.Normalize([0.5], [0.5])
     ])
 
     test_transformations = transforms.Compose([
+        transforms.Grayscale(),
         transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        transforms.Normalize([0.5], [0.5])
     ])
 
     cuda_avail = torch.cuda.is_available()
