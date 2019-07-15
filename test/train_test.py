@@ -15,21 +15,28 @@ class GestureNet(nn.Module):
     def __init__(self, num_classes=11):
         super(GestureNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=12, kernel_size=3, stride=1, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu1 = nn.ReLU()
 
-        self.conv2 = nn.Conv2d(in_channels=12, out_channels=12, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=24, out_channels=32, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
+
+        self.conv3 = nn.Conv2d(in_channels=32, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.relu3 = nn.ReLU()
 
         self.pool = nn.MaxPool2d(kernel_size=2)
 
-        self.conv3 = nn.Conv2d(in_channels=12, out_channels=24, kernel_size=3, stride=1, padding=1)
-        self.relu3 = nn.ReLU()
+        self.dropout1 = nn.Dropout(0.3)
 
-        self.conv4 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.fc1 = nn.Linear(in_features=int(img_width/2) * int(img_height/2) * 48, out_features=96)
         self.relu4 = nn.ReLU()
 
-        self.fc = nn.Linear(in_features=int(img_width/2) * int(img_height/2) * 24, out_features=num_classes)
+        self.dropout2 = nn.Dropout(0.2)
+
+        self.fc2 = nn.Linear(in_features=96, out_features=48)
+        self.relu5 = nn.ReLU()
+
+        self.fc3 = nn.Linear(in_features=48, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
@@ -38,17 +45,24 @@ class GestureNet(nn.Module):
         output = self.conv2(output)
         output = self.relu2(output)
 
-        output = self.pool(output)
-
         output = self.conv3(output)
         output = self.relu3(output)
 
-        output = self.conv4(output)
+        output = self.pool(output))
+
+        output = self.dropout1(output))
+
+        output = output.view(-1, int(img_width/2) * int(img_height/2) * 48)
+
+        output = self.fc1(output)
         output = self.relu4(output)
 
-        output = output.view(-1, int(img_width/2) * int(img_height/2) * 24)
+        output = self.dropout2(output))
 
-        output = self.fc(output)
+        output = self.fc2(output)
+        output = self.relu5(output)
+
+        output = self.fc3(output)
 
         return output
 
@@ -183,15 +197,13 @@ def save_models(epoch):
 
 if __name__ == "__main__":
     train_transformations = transforms.Compose([
-        transforms.Grayscale(),
         transforms.ToTensor(),
-        transforms.Normalize([0.5], [0.5])
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
     test_transformations = transforms.Compose([
-        transforms.Grayscale(),
         transforms.ToTensor(),
-        transforms.Normalize([0.5], [0.5])
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
     cuda_avail = torch.cuda.is_available()
