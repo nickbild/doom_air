@@ -48,16 +48,16 @@ class GestureNet(nn.Module):
         output = self.conv3(output)
         output = self.relu3(output)
 
-        output = self.pool(output))
+        output = self.pool(output)
 
-        output = self.dropout1(output))
+        output = self.dropout1(output)
 
         output = output.view(-1, int(img_width/2) * int(img_height/2) * 48)
 
         output = self.fc1(output)
         output = self.relu4(output)
 
-        output = self.dropout2(output))
+        output = self.dropout2(output)
 
         output = self.fc2(output)
         output = self.relu5(output)
