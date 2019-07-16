@@ -15,25 +15,25 @@ class GestureNet(nn.Module):
     def __init__(self, num_classes=11):
         super(GestureNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=18, kernel_size=3, stride=1, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=12, kernel_size=3, stride=1, padding=1)
         self.relu1 = nn.ReLU()
 
-        self.conv2 = nn.Conv2d(in_channels=18, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=12, out_channels=12, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
 
-        self.conv3 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=12, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu3 = nn.ReLU()
 
         self.pool = nn.MaxPool2d(kernel_size=2)
 
         self.dropout1 = nn.Dropout(0.3)
 
-        self.fc1 = nn.Linear(in_features=int(img_width/2) * int(img_height/2) * 24, out_features=64)
+        self.fc1 = nn.Linear(in_features=int(img_width/2) * int(img_height/2) * 24, out_features=32)
         self.relu4 = nn.ReLU()
 
         self.dropout2 = nn.Dropout(0.2)
 
-        self.fc2= nn.Linear(in_features=64, out_features=num_classes)
+        self.fc2= nn.Linear(in_features=32, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
@@ -165,7 +165,7 @@ def train(num_epochs):
 
 
 def adjust_learning_rate(epoch):
-    lr = 0.00001
+    lr = 0.000001
 
     if epoch > 180:
         lr = lr / 1000000
@@ -207,7 +207,7 @@ if __name__ == "__main__":
     if cuda_avail:
         model.cuda()
 
-    optimizer = Adam(model.parameters(), lr=0.00001, weight_decay=0.0001)
+    optimizer = Adam(model.parameters(), lr=0.000001, weight_decay=0.0001)
     loss_fn = nn.CrossEntropyLoss()
 
     train_loader = load_train_dataset(train_transformations)
