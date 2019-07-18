@@ -15,54 +15,53 @@ class GestureNet(nn.Module):
     def __init__(self, num_classes=11):
         super(GestureNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=12, kernel_size=3, stride=1, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=36, kernel_size=3, stride=2, padding=1)
         self.relu1 = nn.ReLU()
-
-        self.conv2 = nn.Conv2d(in_channels=12, out_channels=12, kernel_size=3, stride=1, padding=1)
-        self.relu2 = nn.ReLU()
 
         self.pool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv3 = nn.Conv2d(in_channels=12, out_channels=24, kernel_size=3, stride=1, padding=1)
-        self.relu3 = nn.ReLU()
-
-        self.conv4 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
-        self.relu4 = nn.ReLU()
+        self.conv2 = nn.Conv2d(in_channels=36, out_channels=36, kernel_size=3, stride=1, padding=1)
+        self.relu2 = nn.ReLU()
 
         self.pool2 = nn.MaxPool2d(kernel_size=2)
 
-        self.dropout1 = nn.Dropout(0.3)
+        self.dropout1 = nn.Dropout(0.2)
 
-        self.fc1 = nn.Linear(in_features=int(img_width/4) * int(img_height/4) * 24, out_features=32)
-        self.relu5 = nn.ReLU()
+        self.conv3 = nn.Conv2d(in_channels=36, out_channels=36, kernel_size=3, stride=1, padding=1)
+        self.relu3 = nn.ReLU()
 
-        self.dropout2 = nn.Dropout(0.2)
+        self.pool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.fc2= nn.Linear(in_features=32, out_features=num_classes)
+        self.fc1 = nn.Linear(in_features=36*18*18, out_features=64)
+        self.relu4 = nn.ReLU()
+
+        self.dropout2 = nn.Dropout(0.25)
+
+        self.fc2= nn.Linear(in_features=64, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
         output = self.relu1(output)
 
-        output = self.conv2(output)
-        output = self.relu2(output)
-
         output = self.pool1(output)
 
-        output = self.conv3(output)
-        output = self.relu3(output)
-
-        output = self.conv4(output)
-        output = self.relu4(output)
+        output = self.conv2(output)
+        output = self.relu2(output)
 
         output = self.pool2(output)
 
         output = self.dropout1(output)
 
-        output = output.view(-1, int(img_width/4) * int(img_height/4) * 24)
+        output = self.conv3(output)
+        output = self.relu3(output)
+
+        output = self.pool3(output)
+
+        # print(output.shape)
+        output = output.view(-1, 36*18*18)
 
         output = self.fc1(output)
-        output = self.relu5(output)
+        output = self.relu4(output)
 
         output = self.dropout2(output)
 
@@ -82,7 +81,7 @@ def load_train_dataset(train_transformations):
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=32,
-        num_workers=0,
+        num_workers=4,
         shuffle=True
     )
 
@@ -100,7 +99,7 @@ def load_test_dataset(test_transformations):
     test_loader = torch.utils.data.DataLoader(
         test_dataset,
         batch_size=32,
-        num_workers=0,
+        num_workers=4,
         shuffle=False
     )
 
@@ -178,14 +177,10 @@ def adjust_learning_rate(epoch):
     lr = 0.000001
 
     if epoch > 180:
-        lr = lr / 100000
-    elif epoch > 150:
-        lr = lr / 10000
-    elif epoch > 120:
         lr = lr / 1000
-    elif epoch > 90:
+    elif epoch > 150:
         lr = lr / 100
-    elif epoch > 60:
+    elif epoch > 120:
         lr = lr / 10
 
     for param_group in optimizer.param_groups:
@@ -222,4 +217,4 @@ if __name__ == "__main__":
     test_loader = load_test_dataset(test_transformations)
 
     print("Starting training.")
-    train(200)
+    train(500)
