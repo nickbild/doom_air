@@ -15,12 +15,12 @@ class GestureNet(nn.Module):
     def __init__(self, num_classes=11):
         super(GestureNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=36, kernel_size=3, stride=2, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=48, kernel_size=3, stride=2, padding=1)
         self.relu1 = nn.ReLU()
 
         self.pool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv2 = nn.Conv2d(in_channels=36, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
 
         self.pool2 = nn.MaxPool2d(kernel_size=2)
@@ -30,14 +30,20 @@ class GestureNet(nn.Module):
         self.conv3 = nn.Conv2d(in_channels=48, out_channels=64, kernel_size=3, stride=1, padding=1)
         self.relu3 = nn.ReLU()
 
+        self.conv4 = nn.Conv2d(in_channels=64, out_channels=96, kernel_size=3, stride=1, padding=1)
+        self.relu4 = nn.ReLU()
+
+        self.conv5 = nn.Conv2d(in_channels=96, out_channels=96, kernel_size=3, stride=1, padding=1)
+        self.relu5 = nn.ReLU()
+
         self.pool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.fc1 = nn.Linear(in_features=64*18*18, out_features=128)
-        self.relu4 = nn.ReLU()
+        self.fc1 = nn.Linear(in_features=96*18*18, out_features=164)
+        self.relu6 = nn.ReLU()
 
         self.dropout2 = nn.Dropout(0.25)
 
-        self.fc2= nn.Linear(in_features=128, out_features=num_classes)
+        self.fc2= nn.Linear(in_features=164, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
@@ -55,13 +61,19 @@ class GestureNet(nn.Module):
         output = self.conv3(output)
         output = self.relu3(output)
 
+        output = self.conv4(output)
+        output = self.relu4(output)
+
+        output = self.conv5(output)
+        output = self.relu5(output)
+
         output = self.pool3(output)
 
         # print(output.shape)
-        output = output.view(-1, 64*18*18)
+        output = output.view(-1, 96*18*18)
 
         output = self.fc1(output)
-        output = self.relu4(output)
+        output = self.relu6(output)
 
         output = self.dropout2(output)
 
