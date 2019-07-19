@@ -6,3 +6,5 @@ Play Doom on a giant screen using your body as the controller.
 
 Coming soon!
 
+Note: Doom was developed by id Software. I have created a new interface for that game, but not the game itself.
+
