@@ -20,14 +20,14 @@ class GestureNet(nn.Module):
 
         self.pool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv2 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=48, out_channels=64, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
 
         self.pool2 = nn.MaxPool2d(kernel_size=2)
 
         self.dropout1 = nn.Dropout(0.2)
 
-        self.conv3 = nn.Conv2d(in_channels=48, out_channels=64, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1)
         self.relu3 = nn.ReLU()
 
         self.conv4 = nn.Conv2d(in_channels=64, out_channels=96, kernel_size=3, stride=1, padding=1)
