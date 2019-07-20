@@ -6,7 +6,7 @@ from torchvision.models import squeezenet1_1
 from io import open
 import os
 from PIL import Image
-from train import GestureNet
+from train_test import GestureNet
 import cv2
 from time import sleep
 import cv2
@@ -15,8 +15,8 @@ import requests
 
 img_width = 300
 img_height = 300
-doom_host = "127.0.0.1"
-trained_model = "gestures_14_11924-11586_arch5.model"
+doom_host = "192.168.1.113:5000"
+trained_model = "gestures_61_1630-1650_arch14.model"
 num_classes = 11
 
 
@@ -74,27 +74,38 @@ if __name__ == "__main__":
             #print("Score: ", score)
 
             if index == 0 and score > 29:
-                requests.get("http://{}/backward".format(doom_host))
+                print("Backwards")
+                #requests.get("http://{}/backward".format(doom_host))
             elif index == 1 and score > 35:
-                requests.get("http://{}/crouch".format(doom_host))
+                print("Crouch")
+                #requests.get("http://{}/crouch".format(doom_host))
             elif index == 2 and score > 35:
-                requests.get("http://{}/forward".format(doom_host))
+                print("Forwards")
+                #requests.get("http://{}/forward".format(doom_host))
             elif index == 3 and score > 10:
-                requests.get("http://{}/god_mode".format(doom_host))
+                print("God mode")
+                #requests.get("http://{}/god_mode".format(doom_host))
             elif index == 4 and score > 44:
-                requests.get("http://{}/jump".format(doom_host))
+                print("Jump")
+                #requests.get("http://{}/jump".format(doom_host))
             elif index == 5 and score > 35:
-                requests.get("http://{}/left".format(doom_host))
+                print("Left")
+                #requests.get("http://{}/left".format(doom_host))
             elif index == 6 and score > 33:
-                requests.get("http://{}/next_weapon".format(doom_host))
+                print("Next Weapon")
+                #requests.get("http://{}/next_weapon".format(doom_host))
             elif index == 7:
+                print("Nothing")
                 pass
             elif index == 8 and score > 35:
-                requests.get("http://{}/right".format(doom_host))
+                print("Right")
+                #requests.get("http://{}/right".format(doom_host))
             elif index == 9 and score > 30:
-                requests.get("http://{}/fire".format(doom_host))
+                print("Shoot")
+                #requests.get("http://{}/fire".format(doom_host))
             elif index == 10 and score > 23:
-                requests.get("http://{}/space".format(doom_host))
+                print("Use")
+                #requests.get("http://{}/space".format(doom_host))
 
         cap.release()
     else:
