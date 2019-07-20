@@ -20,30 +20,39 @@ class GestureNet(nn.Module):
 
         self.pool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv2 = nn.Conv2d(in_channels=48, out_channels=64, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
+
+        self.conv3 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.relu3 = nn.ReLU()
+
+        self.conv4 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.relu4 = nn.ReLU()
 
         self.pool2 = nn.MaxPool2d(kernel_size=2)
 
-        self.dropout1 = nn.Dropout(0.2)
+        self.dropout1 = nn.Dropout(0.3)
 
-        self.conv3 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1)
-        self.relu3 = nn.ReLU()
-
-        self.conv4 = nn.Conv2d(in_channels=64, out_channels=96, kernel_size=3, stride=1, padding=1)
-        self.relu4 = nn.ReLU()
-
-        self.conv5 = nn.Conv2d(in_channels=96, out_channels=96, kernel_size=3, stride=1, padding=1)
+        self.conv5 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
         self.relu5 = nn.ReLU()
+
+        self.conv6 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.relu6 = nn.ReLU()
+
+        self.conv7 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.relu7 = nn.ReLU()
+
+        self.conv8 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.relu8 = nn.ReLU()
 
         self.pool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.fc1 = nn.Linear(in_features=96*18*18, out_features=164)
-        self.relu6 = nn.ReLU()
+        self.fc1 = nn.Linear(in_features=48*18*18, out_features=128)
+        self.relu9 = nn.ReLU()
 
-        self.dropout2 = nn.Dropout(0.25)
+        self.dropout2 = nn.Dropout(0.3)
 
-        self.fc2= nn.Linear(in_features=164, out_features=num_classes)
+        self.fc2= nn.Linear(in_features=128, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
@@ -54,26 +63,35 @@ class GestureNet(nn.Module):
         output = self.conv2(output)
         output = self.relu2(output)
 
+        utput = self.conv3(output)
+        output = self.relu3(output)
+
+        utput = self.conv4(output)
+        output = self.relu4(output)
+
         output = self.pool2(output)
 
         output = self.dropout1(output)
 
-        output = self.conv3(output)
-        output = self.relu3(output)
-
-        output = self.conv4(output)
-        output = self.relu4(output)
-
         output = self.conv5(output)
         output = self.relu5(output)
+
+        output = self.conv6(output)
+        output = self.relu6(output)
+
+        output = self.conv7(output)
+        output = self.relu7(output)
+
+        output = self.conv8(output)
+        output = self.relu8(output)
 
         output = self.pool3(output)
 
         # print(output.shape)
-        output = output.view(-1, 96*18*18)
+        output = output.view(-1, 48*18*18)
 
         output = self.fc1(output)
-        output = self.relu6(output)
+        output = self.relu9(output)
 
         output = self.dropout2(output)
 
