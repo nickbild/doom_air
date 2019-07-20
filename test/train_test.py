@@ -15,39 +15,39 @@ class GestureNet(nn.Module):
     def __init__(self, num_classes=11):
         super(GestureNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=48, kernel_size=3, stride=2, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=24, kernel_size=3, stride=2, padding=1)
         self.relu1 = nn.ReLU()
 
         self.pool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv2 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
 
-        self.conv3 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu3 = nn.ReLU()
 
-        self.conv4 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv4 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu4 = nn.ReLU()
 
         self.pool2 = nn.MaxPool2d(kernel_size=2)
 
         self.dropout1 = nn.Dropout(0.3)
 
-        self.conv5 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv5 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu5 = nn.ReLU()
 
-        self.conv6 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv6 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu6 = nn.ReLU()
 
-        self.conv7 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv7 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu7 = nn.ReLU()
 
-        self.conv8 = nn.Conv2d(in_channels=48, out_channels=48, kernel_size=3, stride=1, padding=1)
+        self.conv8 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu8 = nn.ReLU()
 
         self.pool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.fc1 = nn.Linear(in_features=48*18*18, out_features=128)
+        self.fc1 = nn.Linear(in_features=24*18*18, out_features=128)
         self.relu9 = nn.ReLU()
 
         self.dropout2 = nn.Dropout(0.3)
@@ -88,7 +88,7 @@ class GestureNet(nn.Module):
         output = self.pool3(output)
 
         # print(output.shape)
-        output = output.view(-1, 48*18*18)
+        output = output.view(-1, 24*18*18)
 
         output = self.fc1(output)
         output = self.relu9(output)
