@@ -65,6 +65,8 @@ def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=i
 if __name__ == "__main__":
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
+    lastIndex = -1
+
     if cap.isOpened():
         while True:
             ret_val, img = cap.read()
@@ -73,39 +75,41 @@ if __name__ == "__main__":
             #print("Predicted Class: ", index)
             #print("Score: ", score)
 
-            if index == 0 and score > 29:
+            if index == 0 and lastIndex == 0 and score > 19:
                 print("Backwards")
                 #requests.get("http://{}/backward".format(doom_host))
-            elif index == 1 and score > 35:
+            elif index == 1 and lastIndex == 1 and score > 28:
                 print("Crouch")
                 #requests.get("http://{}/crouch".format(doom_host))
-            elif index == 2 and score > 35:
+            elif index == 2 and lastIndex == 2 and score > 18:
                 print("Forwards")
                 #requests.get("http://{}/forward".format(doom_host))
-            elif index == 3 and score > 10:
+            elif index == 3 and lastIndex == 3 and score > 13:
                 print("God mode")
                 #requests.get("http://{}/god_mode".format(doom_host))
-            elif index == 4 and score > 44:
+            elif index == 4 and lastIndex == 4 and score > 30:
                 print("Jump")
                 #requests.get("http://{}/jump".format(doom_host))
-            elif index == 5 and score > 35:
+            elif index == 5 and lastIndex == 5 and score > 20:
                 print("Left")
                 #requests.get("http://{}/left".format(doom_host))
-            elif index == 6 and score > 33:
+            elif index == 6 and lastIndex == 6 and score > 20:
                 print("Next Weapon")
                 #requests.get("http://{}/next_weapon".format(doom_host))
             elif index == 7:
                 print("Nothing")
                 pass
-            elif index == 8 and score > 35:
+            elif index == 8 and lastIndex == 8 and score > 20:
                 print("Right")
                 #requests.get("http://{}/right".format(doom_host))
-            elif index == 9 and score > 30:
+            elif index == 9 and lastIndex == 9 and score > 29:
                 print("Shoot")
                 #requests.get("http://{}/fire".format(doom_host))
-            elif index == 10 and score > 23:
+            elif index == 10 and lastIndex == 10 and score > 17:
                 print("Use")
                 #requests.get("http://{}/space".format(doom_host))
+
+            lastIndex = index
 
         cap.release()
     else:
