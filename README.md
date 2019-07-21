@@ -34,7 +34,7 @@ The CNN has been trained to detect the following gestures.
 
 ## Training
 
-The CNN was ultimately trained on 3,300 images (300 per gesture).  I tried as many as 32,000 training images, but found that I got a bit sloppy in the course of capturing so many images and some of the gestures were a bit off what I actually wanted detected, so the network would get a bit confused a times.  Machine learning requires a lot of data, yes, but the quality of that data also matters.
+The CNN was ultimately trained on 3,300 images (300 per gesture).  I tried as many as 32,000 training images, but found that I got a bit sloppy in the course of capturing so many images and some of the gestures were a bit off what I actually wanted detected, so the network would get a bit confused at times.  Machine learning requires a lot of data, yes, but the quality of that data also matters.
 
 I found it necessary to capture each gesture from a variety of slightly varying angles and lighting conditions or the resultant network was not tolerant of the unavoidable variances that will be present in real data.  Here are a few of the images captured for the 'shoot' gesture, for example:
 
