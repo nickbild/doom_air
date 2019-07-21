@@ -10,6 +10,10 @@ Note: Doom was developed by id Software. I have created a new interface for that
 
 ![Project Diagram](https://raw.githubusercontent.com/nickbild/doom_air/master/img/doom_air.jpg)
 
+Doom runs on a laptop, which is connected to a projector.  The laptop also runs a [REST API](https://github.com/nickbild/doom_air/blob/master/api.py) that simulates physical key presses on the keyboard when each endpoint receives a remote request.
+
+A Jetson Nano has a CSI camera pointed at the subject.  It is running a convolutional neural network model in real time as images are captured by the camera.  When a gesture (of the set of gestures the model has been trained on) is detected, an API request is sent to the laptop.  This simulates a keypress, and controls the action in Doom.
+
 ## Media
 
 See it in action:
