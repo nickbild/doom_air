@@ -40,6 +40,12 @@ I found it necessary to capture each gesture from a variety of slightly varying 
 
 ![](https://raw.githubusercontent.com/nickbild/doom_air/master/img/train_data_example.gif)
 
+Designing the model and finding optimal parameters involved a lot of intuition, trial and error, and time on AWS GPU instances.  Trial and error seems to pretty well be the state of the art in machine learning at this time.  I'm being slightly flippant in saying this, but only slightly.  There are some efforts, such as [AutoML](https://en.wikipedia.org/wiki/Automated_machine_learning) that are working to improve the present situation.
+
+It was also necessary to consider that, while the Jetson Nano has some decent AI horsepower, it is limited.  So, I needed to keep my models reasonable or they'd run too slow for real time image classification.
+
+I settled on a model with 8 convolutional layers and 2 fully connected layers.  It evaluated the test data set with approximately 98% accuracy, and performed very well under real conditions.  The depth of the convolutional layers helped pick out higher order features, like arms, legs, head, etc.  Too shallow of a network would only pick out basic features like lines, and it would struggle to recognize gestures.
+
 ## Media
 
 See it in action:
