@@ -40,6 +40,8 @@ I found it necessary to capture each gesture from a variety of slightly varying 
 
 ![](https://raw.githubusercontent.com/nickbild/doom_air/master/img/train_data_example.gif)
 
+To capture so many images, I created an [automated pipeline](https://github.com/nickbild/doom_air/blob/master/util/all_gestures.sh) that would prompt me for each gesture, then capture images at a specified interval.
+
 Designing the model and finding optimal parameters involved a lot of intuition, trial and error, and time on AWS GPU instances.  Trial and error seems to pretty well be the state of the art in machine learning at this time.  I'm being slightly flippant in saying this, but only slightly.  There are some efforts, such as [AutoML](https://en.wikipedia.org/wiki/Automated_machine_learning) that are working to improve the present situation.
 
 It was also necessary to consider that, while the Jetson Nano has some decent AI horsepower, it is limited.  So, I needed to keep my models reasonable or they'd run too slow for real time image classification.
