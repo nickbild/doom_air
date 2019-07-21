@@ -14,7 +14,7 @@ Doom runs on a laptop, which is connected to a projector.  The laptop also runs 
 
 A Jetson Nano has a CSI camera pointed at the subject.  It is running a convolutional neural network (CNN) model in real time as images are captured by the camera.  When a gesture (of the set of gestures the model has been trained on) is detected, an API request is sent to the laptop.  This simulates a keypress, and controls the action in Doom.
 
-# Gestures
+## Gestures
 
 The CNN has been trained to detect the following gestures.
 
@@ -31,6 +31,14 @@ The CNN has been trained to detect the following gestures.
 | Next Weapon | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/next_weapon/gesture_next_train_20_5.jpg) |
 | God Mode | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/god_mode/gesture_god_train_20_1.jpg) |
 | Nothing | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/nothing/gesture_nothing_train_20_2.jpg) |
+
+## Training
+
+The CNN was ultimately trained on 3,300 images (300 per gesture).  I tried as many as 32,000 training images, but found that I got a bit sloppy in the course of capturing so many images and some of the gestures were a bit off what I actually wanted detected, so the network would get a bit confused a times.  Machine learning requires a lot of data, yes, but the quality of that data also matters.
+
+I found it necessary to capture each gesture from a variety of slightly varying angles and lighting conditions or the resultant network was not tolerant of the unavoidable variances that will be present in real data.  Here are a few of the images captured for the 'shoot' gesture, for example:
+
+![](https://raw.githubusercontent.com/nickbild/doom_air/master/img/train_data_example.gif)
 
 ## Media
 
