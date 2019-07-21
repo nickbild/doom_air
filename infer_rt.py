@@ -10,33 +10,35 @@ from train_test import GestureNet
 import cv2
 from time import sleep
 import cv2
+import requests
 
 
 img_width = 300
 img_height = 300
+doom_host = "192.168.1.113:5000"
+trained_model = "gestures_31_3251-3300_arch14.model"
+num_classes = 11
 
 
 # Load the saved model.
-checkpoint = torch.load("gestures_31_3251-3300_arch14.model")
-model = GestureNet(num_classes=11)
+checkpoint = torch.load(trained_model)
+model = GestureNet(num_classes=num_classes)
 model.load_state_dict(checkpoint)
 model.eval()
 
+transformation = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+])
+
 
 def predict_image_class(image):
-    transformation = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-
     # Preprocess the image.
     image_tensor = transformation(image).float()
 
     # Add an extra batch dimension since pytorch treats all images as batches.
     image_tensor = image_tensor.unsqueeze_(0)
-
-    if torch.cuda.is_available():
-        image_tensor.cuda()
+    image_tensor.cuda()
 
     # Turn the input into a Variable.
     input = Variable(image_tensor)
@@ -63,15 +65,52 @@ def gstreamer_pipeline (capture_width=3280, capture_height=2464, display_width=i
 if __name__ == "__main__":
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
+    lastIndex = -1
+
     if cap.isOpened():
         while True:
             ret_val, img = cap.read()
             index, score = predict_image_class(img)
-            #if score > 1.0:
-            print("Predicted Class: ", index)
-            print("Score: ", score)
+
+            #print("Predicted Class: ", index)
+            #print("Score: ", score)
+
+            if index == 0 and lastIndex == 0 and score > 10:
+                #print("Backwards")
+                requests.get("http://{}/backward".format(doom_host))
+            elif index == 1 and lastIndex == 1 and score > 19:
+                #print("Crouch")
+                requests.get("http://{}/crouch".format(doom_host))
+            elif index == 2 and lastIndex == 2 and score > 40:
+                #print("Forwards")
+                requests.get("http://{}/forward".format(doom_host))
+            elif index == 3 and lastIndex == 3 and score > 13:
+                #print("God mode")
+                requests.get("http://{}/god_mode".format(doom_host))
+            elif index == 4 and lastIndex == 4 and score > 40:
+                #print("Jump")
+                requests.get("http://{}/jump".format(doom_host))
+            elif index == 5 and lastIndex == 5 and score > 25:
+                #print("Left")
+                requests.get("http://{}/left".format(doom_host))
+            elif index == 6 and lastIndex == 6 and score > 28:
+                #print("Next Weapon")
+                requests.get("http://{}/next_weapon".format(doom_host))
+            elif index == 7:
+                #print("Nothing")
+                pass
+            elif index == 8 and lastIndex == 8 and score > 30:
+                #print("Right")
+                requests.get("http://{}/right".format(doom_host))
+            elif index == 9 and lastIndex == 9 and score > 35:
+                #print("Shoot")
+                requests.get("http://{}/fire".format(doom_host))
+            elif index == 10 and lastIndex == 10 and score > 28:
+                #print("Use")
+                requests.get("http://{}/space".format(doom_host))
+
+            lastIndex = index
 
         cap.release()
     else:
         print('Unable to open camera.')
-
