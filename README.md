@@ -20,7 +20,7 @@ The CNN has been trained to detect the following gestures.
 
 | Action | Example |
 | ----   | ----- |
-| Forward |  |
+| Forward | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/forward/gesture_forward_train_20_1.jpg) |
 | Backward |  |
 | Left |  |
 | Right |  |
