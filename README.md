@@ -21,16 +21,16 @@ The CNN has been trained to detect the following gestures.
 | Action | Example |
 | ----   | ----- |
 | Forward | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/forward/gesture_forward_train_20_1.jpg) |
-| Backward |  |
-| Left |  |
-| Right |  |
-| Shoot |  |
-| Use |  |
-| Jump |  |
-| Crouch |  |
-| Next Weapon |  |
-| God Mode |  |
-| Nothing |  |
+| Backward | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/backward/gesture_backward_train_20_1.jpg) |
+| Left | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/left/gesture_left_train_24_2.jpg) |
+| Right | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/right/gesture_right_train_22_2.jpg) |
+| Shoot | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/shoot/gesture_shoot_train_21_3.jpg) |
+| Use | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/use/gesture_use_train_20_5.jpg) |
+| Jump | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/jump/gesture_jump_train_20_1.jpg) |
+| Crouch | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/crouch/gesture_crouch_train_21_3.jpg) |
+| Next Weapon | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/next_weapon/gesture_next_train_20_5.jpg) |
+| God Mode | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/god_mode/gesture_god_train_20_1.jpg) |
+| Nothing | ![](https://raw.githubusercontent.com/nickbild/doom_air/master/data/train/nothing/gesture_nothing_train_20_2.jpg) |
 
 ## Media
 
