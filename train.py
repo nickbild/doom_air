@@ -15,40 +15,87 @@ class GestureNet(nn.Module):
     def __init__(self, num_classes=11):
         super(GestureNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=12, kernel_size=3, stride=1, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=24, kernel_size=3, stride=2, padding=1)
         self.relu1 = nn.ReLU()
 
-        self.conv2 = nn.Conv2d(in_channels=12, out_channels=12, kernel_size=3, stride=1, padding=1)
+        self.pool1 = nn.MaxPool2d(kernel_size=2)
+
+        self.conv2 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu2 = nn.ReLU()
 
-        self.pool = nn.MaxPool2d(kernel_size=2)
-
-        self.conv3 = nn.Conv2d(in_channels=12, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu3 = nn.ReLU()
 
         self.conv4 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
         self.relu4 = nn.ReLU()
 
-        self.fc = nn.Linear(in_features=int(img_width/2) * int(img_height/2) * 24, out_features=num_classes)
+        self.pool2 = nn.MaxPool2d(kernel_size=2)
+
+        self.dropout1 = nn.Dropout(0.3)
+
+        self.conv5 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.relu5 = nn.ReLU()
+
+        self.conv6 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.relu6 = nn.ReLU()
+
+        self.conv7 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.relu7 = nn.ReLU()
+
+        self.conv8 = nn.Conv2d(in_channels=24, out_channels=24, kernel_size=3, stride=1, padding=1)
+        self.relu8 = nn.ReLU()
+
+        self.pool3 = nn.MaxPool2d(kernel_size=2)
+
+        self.fc1 = nn.Linear(in_features=24*18*18, out_features=128)
+        self.relu9 = nn.ReLU()
+
+        self.dropout2 = nn.Dropout(0.3)
+
+        self.fc2= nn.Linear(in_features=128, out_features=num_classes)
 
     def forward(self, input):
         output = self.conv1(input)
         output = self.relu1(output)
 
+        output = self.pool1(output)
+
         output = self.conv2(output)
         output = self.relu2(output)
 
-        output = self.pool(output)
-
-        output = self.conv3(output)
+        utput = self.conv3(output)
         output = self.relu3(output)
 
-        output = self.conv4(output)
+        utput = self.conv4(output)
         output = self.relu4(output)
 
-        output = output.view(-1, int(img_width/2) * int(img_height/2) * 24)
+        output = self.pool2(output)
 
-        output = self.fc(output)
+        output = self.dropout1(output)
+
+        output = self.conv5(output)
+        output = self.relu5(output)
+
+        output = self.conv6(output)
+        output = self.relu6(output)
+
+        output = self.conv7(output)
+        output = self.relu7(output)
+
+        output = self.conv8(output)
+        output = self.relu8(output)
+
+        output = self.pool3(output)
+
+        # print(output.shape)
+        output = output.view(-1, 24*18*18)
+
+        output = self.fc1(output)
+        output = self.relu9(output)
+
+        output = self.dropout2(output)
+
+        output = self.fc2(output)
 
         return output
 
@@ -64,7 +111,7 @@ def load_train_dataset(train_transformations):
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=32,
-        num_workers=0,
+        num_workers=4,
         shuffle=True
     )
 
@@ -82,7 +129,7 @@ def load_test_dataset(test_transformations):
     test_loader = torch.utils.data.DataLoader(
         test_dataset,
         batch_size=32,
-        num_workers=0,
+        num_workers=4,
         shuffle=False
     )
 
@@ -148,7 +195,7 @@ def train(num_epochs):
 
         # Save the model if the test acc is greater than our current best
         if test_acc >= best_acc or train_acc >= best_acc_train:
-            save_models(epoch)
+            save_models(epoch, train_acc, test_acc)
             best_acc = test_acc
             best_acc_train = train_acc
 
@@ -157,27 +204,21 @@ def train(num_epochs):
 
 
 def adjust_learning_rate(epoch):
-    lr = 0.00001
+    lr = 0.000001
 
     if epoch > 180:
-        lr = lr / 1000000
-    elif epoch > 150:
-        lr = lr / 100000
-    elif epoch > 120:
-        lr = lr / 10000
-    elif epoch > 90:
         lr = lr / 1000
-    elif epoch > 60:
+    elif epoch > 150:
         lr = lr / 100
-    elif epoch > 30:
+    elif epoch > 120:
         lr = lr / 10
 
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
 
 
-def save_models(epoch):
-    torch.save(model.state_dict(), "gestures_{}.model".format(epoch))
+def save_models(epoch, train_acc, test_acc):
+    torch.save(model.state_dict(), "gestures_{}_{}-{}.model".format(epoch, train_acc, test_acc))
     print("Model saved.")
 
 
@@ -199,11 +240,11 @@ if __name__ == "__main__":
     if cuda_avail:
         model.cuda()
 
-    optimizer = Adam(model.parameters(), lr=0.00001, weight_decay=0.0001)
+    optimizer = Adam(model.parameters(), lr=0.000001, weight_decay=0.0001)
     loss_fn = nn.CrossEntropyLoss()
 
     train_loader = load_train_dataset(train_transformations)
     test_loader = load_test_dataset(test_transformations)
 
     print("Starting training.")
-    train(200)
+    train(500)
