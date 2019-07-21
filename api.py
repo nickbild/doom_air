@@ -70,32 +70,44 @@ class Right(Resource):
 
 class Control(Resource):
     def get(self):
-        autopy.key.tap(autopy.key.Code.CONTROL, [])
+        autopy.key.toggle(autopy.key.Code.CONTROL, True, [], 0)
+        time.sleep(key_hold_time_sec)
+        autopy.key.toggle(autopy.key.Code.CONTROL, False, [], 0)
         return None
 
 class Space(Resource):
     def get(self):
-        autopy.key.tap(autopy.key.Code.SPACE, [])
+        autopy.key.toggle(autopy.key.Code.SPACE, True, [], 0)
+        time.sleep(key_hold_time_sec)
+        autopy.key.toggle(autopy.key.Code.SPACE, False, [], 0)
         return None
 
 class Fire(Resource):
     def get(self):
-        autopy.key.tap("a", [])
+        autopy.key.toggle(autopy.key.Code.F1, True, [], 0)
+        time.sleep(key_hold_time_sec)
+        autopy.key.toggle(autopy.key.Code.F1, False, [], 0)
         return None
 
 class Jump(Resource):
     def get(self):
-        autopy.key.tap("q", [])
+        autopy.key.toggle(autopy.key.Code.F2, True, [], 0)
+        time.sleep(key_hold_time_sec)
+        autopy.key.toggle(autopy.key.Code.F2, False, [], 0)
         return None
 
 class Crouch(Resource):
     def get(self):
-        autopy.key.tap("z", [])
+        autopy.key.toggle(autopy.key.Code.F3, True, [], 0)
+        time.sleep(key_hold_time_sec)
+        autopy.key.toggle(autopy.key.Code.F3, False, [], 0)
         return None
 
 class NextWeapon(Resource):
     def get(self):
-        autopy.key.tap("p", [])
+        autopy.key.toggle(autopy.key.Code.F4, True, [], 0)
+        time.sleep(key_hold_time_sec)
+        autopy.key.toggle(autopy.key.Code.F4, False, [], 0)
         return None
 
 class PreviousWeapon(Resource):
