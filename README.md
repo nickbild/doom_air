@@ -46,7 +46,22 @@ It was also necessary to consider that, while the Jetson Nano has some decent AI
 
 I settled on a model with 8 convolutional layers and 2 fully connected layers.  It evaluated the test data set with approximately 98% accuracy, and performed very well under real conditions.  The depth of the convolutional layers helped pick out higher order features, like arms, legs, head, etc.  Too shallow of a network would only pick out basic features like lines, and it would struggle to recognize gestures.
 
+## Evaluation
+
+To make the evaluation rock-solid, I used a few tricks.  First, I tested the model out in real time and found what scores were associated with correct gestures.  Scores indicate the degree of certainty the model assigns to an image belonging to the predicted class.  Only predictions with scores greater than or equal to this threshold would make a REST request.
+
+Second, I found that during the transition from one gesture to the next, an inadvertent gesture may be very briefly made.  To correct for this, I require 2 of the same gestures in a row before triggering an action.  Since I kept my model small (and therefore, fast) this was possible with no performance degradation.
+
 ## Media
 
 See it in action:
 [YouTube](https://www.youtube.com/watch?v=b2sixeEpBuU)
+
+The Jetson Nano with CSI camera:
+![](https://raw.githubusercontent.com/nickbild/doom_air/master/img/jetson_nano_sm.jpg)
+
+The setup (Jetson straight ahead, projection on the wall, lamp for illuminating gestures well):
+![](https://raw.githubusercontent.com/nickbild/doom_air/master/img/scene_sm.jpg)
+
+The projector:
+![](https://raw.githubusercontent.com/nickbild/doom_air/master/img/projector_sm.jpg)
