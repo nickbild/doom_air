@@ -6,7 +6,7 @@ from torchvision.models import squeezenet1_1
 from io import open
 import os
 from PIL import Image
-from train import GestureNet
+from train_test import GestureNet
 import cv2
 from time import sleep
 import cv2
@@ -17,7 +17,7 @@ img_height = 300
 
 
 # Load the saved model.
-checkpoint = torch.load("gestures_14_11924-11586_arch5.model")
+checkpoint = torch.load("gestures_31_3251-3300_arch14.model")
 model = GestureNet(num_classes=11)
 model.load_state_dict(checkpoint)
 model.eval()
@@ -27,7 +27,7 @@ def predict_image_class(image):
     transformation = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ])
+        ])
 
     # Preprocess the image.
     image_tensor = transformation(image).float()
