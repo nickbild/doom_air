@@ -18,31 +18,19 @@ A Jetson Nano has a CSI camera pointed at the subject.  It is running a convolut
 
 The CNN has been trained to detect the following gestures.
 
----------
 | Action | Example |
----------
+| ----   | ----- |
 | Forward |  |
---------
 | Backward |  |
---------
 | Left |  |
---------
 | Right |  |
---------
 | Shoot |  |
---------
 | Use |  |
---------
 | Jump |  |
---------
 | Crouch |  |
---------
 | Next Weapon |  |
---------
 | God Mode |  |
---------
 | Nothing |  |
---------
 
 ## Media
 
