@@ -50,7 +50,7 @@ I settled on a model with 8 convolutional layers and 2 fully connected layers.  
 
 ### AWS
 
-I trained on `g3s.xlarge` instances at Amazon AWS, with Nvidia Tesla M60 GPUs.  They come with lots of machine learning packages preinstalled, so it's super easy.  Just launch an EC2 instance from the web dashboard, then clone my github repo:
+I trained on `g3s.xlarge` instances at Amazon AWS, with Nvidia Tesla M60 GPUs.  The `Deep Learning AMI (Ubuntu) Version 23.1` image has lots of machine learning packages preinstalled, so it's super easy to use.  Just launch an EC2 instance from the web dashboard, then clone my github repo:
 
 ```
 git clone https://github.com/nickbild/doom_air.git
