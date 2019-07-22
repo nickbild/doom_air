@@ -48,6 +48,33 @@ It was also necessary to consider that, while the Jetson Nano has some decent AI
 
 I settled on a model with 8 convolutional layers and 2 fully connected layers.  It evaluated the test data set with approximately 98% accuracy, and performed very well under real conditions.  The depth of the convolutional layers helped pick out higher order features, like arms, legs, head, etc.  Too shallow of a network would only pick out basic features like lines, and it would struggle to recognize gestures.
 
+### AWS
+
+I trained on `g3s.xlarge` instances at Amazon AWS, with Nvidia Tesla M60 GPUs.  They come with lots of machine learning packages preinstalled, so it's super easy.  Just launch an EC2 instance from the web dashboard, then clone my github repo:
+
+```
+git clone https://github.com/nickbild/doom_air.git
+```
+
+Then start up a Python3 environment with PyTorch and dependencies and switch to my codebase:
+
+```
+source activate pytorch_p36
+cd doom_air
+```
+
+Now, run my training script:
+
+```
+python3 train.py
+```
+
+That's it!  Now, watch the output to see when the test accuracy gets to a good level (percentage in the 90s).
+
+This will generate `*.model` output files from each epoch that you can download, e.g. with `scp` to use with the `infer_rt.py` script.
+
+To train for your own gestures, just place your own images in the `data` folder under `train` and `test`.  You can make your own folders there if you want to add new gestures.
+
 ## Evaluation
 
 To make the evaluation rock-solid, I used a few tricks.  First, I tested the model out in real time and found what scores were associated with correct gestures.  Scores indicate the degree of certainty the model assigns to an image belonging to the predicted class.  Only predictions with scores greater than or equal to this threshold would make a REST request.
