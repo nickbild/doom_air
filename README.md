@@ -94,3 +94,7 @@ The setup (Jetson straight ahead, projection on the wall, lamp for illuminating 
 
 The projector:
 ![](https://raw.githubusercontent.com/nickbild/doom_air/master/img/projector_sm.jpg)
+
+## About the Author
+
+[Nick A. Bild, MS](https://nickbild79.firebaseapp.com/#!/)
